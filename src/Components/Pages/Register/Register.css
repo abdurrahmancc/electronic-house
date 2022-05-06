@@ -1,0 +1,17 @@
+.agree-Terms:hover{
+    cursor: pointer;
+}
+.bg-input{
+    background-color: #e8f0fe;
+}
+.register-toggoler{
+    border: none;
+    background-color: rgba(255, 255, 255, 0);
+    position: relative;
+    top: 55px;
+    right: 10px;
+    background-color: none;
+}
+.page-hight{
+    height: 81vh;
+}

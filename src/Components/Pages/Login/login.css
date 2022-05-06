@@ -1,0 +1,27 @@
+.login-form{
+    max-width: 500px;
+    margin-top: 30px;
+    
+}
+.toggoler{
+    border: none;
+    background-color: #ffffff00;
+    position: relative;
+    top: 55px;
+    right: 10px;
+    background-color: none;
+}
+.m-top{
+    margin-top: -10px;
+}
+hr{
+    width: 45%;
+    height: 0px;
+    border: 1px solid #95A0A7;
+    
+}
+.hr-line{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,25 @@
+.primaryColor{
+    color: rgb(243,226,0);
+    }
+    .bgPrimaryColor{
+        background-color: rgb(243,226,0);
+    }
+    .bg-transparents{
+        background-color: rgba(3, 4, 4, 0.631);
+    }
+    .spacing{
+        letter-spacing: 1.5px;
+    }
+    
+      .offers:hover{
+        background-color: white;
+      }
+      .offers{
+          border: none;
+      }
+      .learn-more:hover{
+        background-color: rgb(243,226,0);
+      }
+      .learn-more{
+          border: none;
+      }

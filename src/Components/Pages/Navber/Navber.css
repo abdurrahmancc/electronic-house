@@ -1,0 +1,18 @@
+.active{
+    text-decoration:  none;
+    color: orange;
+    font-weight: 700;
+    margin-right: 30px;
+    padding-bottom: 2px;
+    border-bottom: 2px solid orange;
+}
+.inActive{
+    color: white;
+    text-decoration: none;
+    margin-right: 30px;
+    
+}
+.inActive:hover, .active:hover{
+    font-weight: 700;
+    color: white;
+}
