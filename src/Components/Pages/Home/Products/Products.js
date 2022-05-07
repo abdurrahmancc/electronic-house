@@ -8,7 +8,7 @@ const Products = () => {
 
   products.length = 6;
   useEffect(() => {
-    fetch("https://floating-wildwood-16493.herokuapp.com/products")
+    fetch("http://localhost:5000/products")
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
@@ -21,19 +21,19 @@ const Products = () => {
       <div className="row row-cols-1 row-cols-md-3 g-4">
         {products.map((item) => {
           return (
-            <div className="col rounded-3">
-              <div style={{ width: "18rem" }} className="card mx-auto">
+            <div className="col rounded-3 ">
+              <div style={{ width: "18rem" }} className="card p-2 mx-auto">
                 <img
                   style={{ maxHeight: "150px", objectFit: "cover" }}
                   src={item?.img}
                   className="rounded-3"
                   alt="..."
                 />
-                <div className="card-body">
+                <div className="card-body p-2">
                   <h5 className="card-title">{item.name}</h5>
                   <p>price: {item?.price}</p>
                   <p>Quantity: {item?.quantity}</p>
-                  <p className="card-text">{item.description?.slice(0, 65)}...</p>
+                  <p className="card-text">Description: {item.description?.slice(0, 45)}...</p>
                   <div className="d-flex justify-content-between align-items-center">
                     <span>price: {item?.supplierName}</span>
                     <button className=" border-0 btn-background  px-4 py-2 rounded-3 ">

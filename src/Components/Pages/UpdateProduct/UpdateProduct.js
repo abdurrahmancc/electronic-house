@@ -1,25 +1,54 @@
-import React, { useEffect, useState } from "react";
+import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 import { Table } from "react-bootstrap";
+import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 
 const UpdateProduct = () => {
   const [product, setProduct] = useState([]);
   const { id } = useParams();
+  const [reload, setReload] = useState(false);
+  const refInputQuantity = useRef();
 
   useEffect(() => {
-    fetch("https://floating-wildwood-16493.herokuapp.com/products")
+    fetch("https://rocky-citadel-06569.herokuapp.com/products")
       .then((res) => res.json())
       .then((data) => {
         const remaining = data.find((item) => item._id === id);
         setProduct(remaining);
       });
-  }, []);
+  }, [reload]);
   console.log(product);
+
+  //shift product
+  const shiftProduct = async (id) => {
+    const { data } = await axios.put(`http://localhost:5000/product/${id}`, {
+      quantity: product?.quantity - 1,
+    });
+    if (data) {
+      setReload(!reload);
+    }
+  };
+
+  //update Quantity
+  const updateQuantity = async (id) => {
+    if (!/^\d*[1-9]\d*$/.test(refInputQuantity.current.value)) {
+      toast.error("invalid quantity");
+      return;
+    }
+    const inputQuantity = parseInt(refInputQuantity.current.value);
+    const { data } = await axios.put(`http://localhost:5000/product/${id}`, {
+      quantity: product?.quantity + inputQuantity,
+    });
+    if (data) {
+      setReload(!reload);
+    }
+  };
   return (
     <div className="container my-5">
       <div className="w-50 mx-auto">
         {" "}
-        <img style={{ objectFit: "cover" }} className=" w-100 " src={product.img} alt="" />
+        <img style={{ objectFit: "cover" }} className=" w-100" src={product?.img} alt="" />
         <div className=" mx-auto  ">
           <Table striped bordered hover className="mb-0" variant="dark">
             <thead>
@@ -52,24 +81,35 @@ const UpdateProduct = () => {
                 <td colSpan={3}>{product?._id}</td>
               </tr>
               <tr>
-                <td colSpan={2}>Quantity</td>
+                <td colSpan={2}>Description</td>
                 <td colSpan={3}>{product?.description?.slice(0, 160)}...</td>
               </tr>
             </tbody>
           </Table>
           <div>
-            <button className="w-100 border-0 btn-primary text-white rounded py-2">Update</button>
+            <button
+              onClick={() => shiftProduct(product?._id)}
+              className="w-100 border-0 btn-primary text-white rounded py-2"
+            >
+              Shift
+            </button>
 
-            <div class="input-group my-3">
+            <div className="input-group my-3">
               <input
                 type="text"
-                class="form-control"
+                ref={refInputQuantity}
+                className="form-control"
                 placeholder="Enter Quantity"
                 aria-label="Recipient's username"
                 aria-describedby="button-addon2"
               />
-              <button class="btn btn-primary " type="button" id="button-addon2">
-                Button
+              <button
+                onClick={() => updateQuantity(product._id)}
+                className="btn btn-primary "
+                type="button"
+                id="button-addon2"
+              >
+                Update
               </button>
             </div>
           </div>

@@ -2,7 +2,7 @@ import React from "react";
 import "./Subscribe.css";
 const Subscribe = () => {
   return (
-    <div className="mt-5 ">
+    <div className=" ">
       <div className="subscribe-section text-center py-5">
         <h3>
           <span className="pb-2 border-bottom border-3 border-white">Subscribe</span>

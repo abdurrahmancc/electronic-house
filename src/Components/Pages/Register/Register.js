@@ -1,32 +1,100 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Register.css";
 import logo from "../../../img/img/title-logo.png";
+import auth from "../../Hooks/Firebase/Firebase";
+import toast from "react-hot-toast";
 
 const Register = () => {
+  const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(
+    auth,
+    { sendEmailVerification: true }
+  );
   const [hide, setHide] = useState(false);
-  const [showConfiremPassword, setConfirmPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agree, setAgree] = useState(false);
+  const [email, setEmail] = useState({ email: "", emailError: "" });
+  const [password, setPassword] = useState({ password: "", passwordError: "" });
+  const [inputError, setInputError] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState({
+    confirmPassword: "",
+    confirmPasswordError: "",
+  });
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/";
+
+  //handle Hide
   const handleHide = (e) => {
     e.preventDefault();
     setHide(!hide);
   };
 
-  const handleConfirmPassword = (e) => {
+  // handle Confirm password Hide
+  const handleConfirmHide = (e) => {
     e.preventDefault();
-    setConfirmPassword(!showConfiremPassword);
+    setShowConfirmPassword(!showConfirmPassword);
   };
+
+  // handle email
+  const handleEmail = (inputEmail) => {
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputEmail)) {
+      setEmail({ email: inputEmail, emailError: "" });
+    } else {
+      setEmail({ email: "", emailError: "Invalid Email" });
+    }
+  };
+
+  // handle email
+  const handlepassword = (inputPassword) => {
+    if (/(?=.*?[#?!@$%^&*-])/.test(inputPassword)) {
+      setPassword({ password: inputPassword, passwordError: "" });
+    } else {
+      setPassword({ password: "", passwordError: "Invalid Password" });
+    }
+  };
+
+  // handle confirm email
+  const handleConfirmpassword = (inputConfirmPassword) => {
+    if (/(?=.*?[#?!@$%^&*-])/.test(inputConfirmPassword)) {
+      setConfirmPassword({ confirmPassword: inputConfirmPassword, confirmPasswordError: "" });
+    } else {
+      setConfirmPassword({ confirmPassword: "", confirmPasswordError: "Invalid Password" });
+    }
+  };
+
+  const handleSubmitForm = (e) => {
+    e.preventDefault();
+    if (password.password === confirmPassword.confirmPassword) {
+      createUserWithEmailAndPassword(email.email, password.password);
+      toast.success("success", { id: "user-create-success" });
+    } else {
+      setInputError("not match your password!");
+    }
+  };
+
+  if (user) {
+    navigate(from, { replace: true });
+  }
+
   return (
     <div style={{ height: "100vh" }} className="d-flex justify-content-center align-items-center">
       <div className="container ">
         <div className="w-50 mx-auto  py-5 rounded login-form bg-white ">
           <h3 className="text-center mb-3">Please Register</h3>
-          <Form className="w-75 mx-auto">
+          <Form onSubmit={handleSubmitForm} className="w-75 mx-auto">
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" name="email" placeholder="Enter email" />
+              <Form.Control
+                type="email"
+                onChange={(e) => handleEmail(e.target.value)}
+                name="email"
+                placeholder="Enter email"
+              />
+              <span className="text-danger">{email?.emailError && email?.emailError}</span>
             </Form.Group>
 
             <div className="text-end">
@@ -37,24 +105,34 @@ const Register = () => {
             <Form.Group className=" m-top" controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control
+                onChange={(e) => handlepassword(e.target.value)}
                 type={hide ? "text" : "password"}
                 name="password"
                 placeholder="Password"
               />
+              <span className="text-danger">
+                {password?.passwordError && password?.passwordError}
+              </span>
             </Form.Group>
 
             <div className="text-end">
-              <button className="register-toggoler" onClick={handleConfirmPassword}>
-                {showConfiremPassword ? <FaEyeSlash /> : <FaEye />}
+              <button className="register-toggoler" onClick={handleConfirmHide}>
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
             <Form.Group className="mb-3 m-top" controlId="formBasicPassword">
               <Form.Label>Confirm Password</Form.Label>
               <Form.Control
-                type={showConfiremPassword ? "text" : "password"}
+                onChange={(e) => handleConfirmpassword(e.target.value)}
+                type={showConfirmPassword ? "text" : "password"}
                 placeholder="Password"
                 name="confirmPassword"
               />
+              <span className="text-danger">
+                {confirmPassword?.confirmPasswordError
+                  ? confirmPassword?.confirmPasswordError
+                  : inputError && inputError}
+              </span>
             </Form.Group>
 
             <Form.Group className="mb-3 " controlId="formBasicCheckbox">
