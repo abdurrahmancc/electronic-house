@@ -28,7 +28,6 @@ const ManageProducts = () => {
     }
   };
 
-  console.log(products);
   return (
     <div style={{ minHeight: "100vh" }} className="container ">
       <div className="w-75 mx-auto">

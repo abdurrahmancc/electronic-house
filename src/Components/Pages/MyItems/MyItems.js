@@ -13,6 +13,7 @@ const MyItems = () => {
   const [items, setItems] = useState([]);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -33,7 +34,20 @@ const MyItems = () => {
         }
       }
     })();
-  }, [user]);
+  }, [user, reload]);
+
+  // delete my product
+  const handleDelete = async (id) => {
+    const proceed = window.confirm("Are you sure want to delete");
+    if (proceed) {
+      const url = `https://rocky-citadel-06569.herokuapp.com/product/${id}`;
+      const result = await axios.delete(url);
+      if (result) {
+        setReload(!reload);
+        toast.success("Delete Success", { id: "deleteSuccess" });
+      }
+    }
+  };
 
   return (
     <div style={{ minHeight: "100vh" }} className="container ">
@@ -66,7 +80,7 @@ const MyItems = () => {
                   </td>
                   <td className="text-center">
                     <FaTrashAlt
-                      // onClick={() => handleDelete(item?._id)}
+                      onClick={() => handleDelete(item?._id)}
                       className="trash-icon"
                     ></FaTrashAlt>
                   </td>
