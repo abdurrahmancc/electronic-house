@@ -22,7 +22,7 @@ const UpdateProduct = () => {
 
   //shift product
   const shiftProduct = async (id) => {
-    const { data } = await axios.put(`http://localhost:5000/product/${id}`, {
+    const { data } = await axios.put(`https://rocky-citadel-06569.herokuapp.com/product/${id}`, {
       quantity: product?.quantity - 1,
     });
     if (data) {
@@ -37,7 +37,7 @@ const UpdateProduct = () => {
       return;
     }
     const inputQuantity = parseInt(refInputQuantity.current.value);
-    const { data } = await axios.put(`http://localhost:5000/product/${id}`, {
+    const { data } = await axios.put(`https://rocky-citadel-06569.herokuapp.com/product/${id}`, {
       quantity: product?.quantity + inputQuantity,
     });
     if (data) {
@@ -98,7 +98,7 @@ const UpdateProduct = () => {
               <input
                 type="text"
                 ref={refInputQuantity}
-                className="form-control"
+                className="form-control text-center"
                 placeholder="Enter Quantity"
                 aria-label="Recipient's username"
                 aria-describedby="button-addon2"

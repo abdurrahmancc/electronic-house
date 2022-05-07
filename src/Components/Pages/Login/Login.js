@@ -10,6 +10,8 @@ import logo from "../../../img/img/title-logo.png";
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
 import auth from "../../Hooks/Firebase/Firebase";
 import PageLoading from "../../Shared/PageLoading/PageLoading";
+import axios from "axios";
+import useAccessToken from "../../Hooks/useAccessToken";
 
 const Login = () => {
   const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
@@ -25,13 +27,15 @@ const Login = () => {
     e.preventDefault();
     setHide(!hide);
   };
+  const [token] = useAccessToken(user);
+  console.log(token);
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
     if (email && password) {
-      signInWithEmailAndPassword(email, password);
+      await signInWithEmailAndPassword(email, password);
     }
   };
 
@@ -39,7 +43,7 @@ const Login = () => {
     return <PageLoading></PageLoading>;
   }
 
-  if (user || signInUser) {
+  if (token) {
     navigate(from, { replace: true });
   }
 
